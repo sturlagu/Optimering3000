@@ -9,17 +9,16 @@ public class graphColoring
 		int[] nodes2 = new int[nodeSize];
 		
 		int brw = 3; //black red white
-		int nodeInsertTemp = Integer.MAX_VALUE;
-		
-		nodes1 = createArray(nodes1, brw, nodeInsertTemp); //fyller array med tilfeldige tall
-		nodes2 = createArray(nodes2, brw, nodeInsertTemp);
+		nodes1 = createArray(nodes1, brw); //fyller array med tilfeldige tall
+		nodes2 = createArray(nodes2, brw);
 		
 		printArray(nodes1); //sender inn i metode som oversetter arrayet til black red white
 		printArray(nodes2);
 		
 		//lag metode som bytter innholdet i de to arrayene mellon to tilfeldige tall
-		//3 if tester som gjør at det går fra minste tall til høyeste
+		//3 if tester som gjoer at det gaar fra minste tall til hoeyeste
 		
+		System.out.println("Fitness: " + fitness(nodes1));
 		
 	}
 	
@@ -30,17 +29,12 @@ public class graphColoring
 		return randomNum;
 	}
 	
-	public static int[] createArray(int []a, int b, int c)
+	public static int[] createArray(int []a, int b)
 	{
 		for(int i=0; i<a.length; i++)
 		{
 			int nodeInsert = randomNumber(b);
-			while(nodeInsert == c) //trekker nytt tall så lenge forrige er likt det nye
-			{
-				nodeInsert = randomNumber(b);
-			}
 			a[i] = nodeInsert; 
-			c = nodeInsert;
 		}
 		return a;
 	}
@@ -65,21 +59,24 @@ public class graphColoring
 		System.out.println("");
 	}
 
-	/*
+
 	public static int fitness(int []a)
 	{
 		int fitnessSatisfaction = 0;
 		
 		for(int i = 0; i<a.length; i++)
 		{
-			if(a[i] == a[i+1] && i<=(a.length-1))
+			if(i<(a.length-1))
 			{
-				fitnessSatisfaction++;
+				if (a[i] != a[i+1])
+				{
+					fitnessSatisfaction++;
+				}
 			}
 		}
 		
 		return fitnessSatisfaction;
 	}
-	*/
+	
 	
 } //Class END
