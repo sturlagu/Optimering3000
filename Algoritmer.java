@@ -153,18 +153,18 @@ public class Algoritmer {
         int bestRoute = Integer.MAX_VALUE;
         int [][] tempSolution = new int[size][size];
         int [][] tempOldSolution = oldSolution.clone();
-        int counter = 0;
-        while(counter != iterativeAmount){
+
+        for(int i = 0; i < iterativeAmount; i++){
             currentRoute = randomAlg(cities, visited, tempOldSolution ,size);
             if(currentRoute < bestRoute){
                 bestRoute = currentRoute;
                 tempSolution = tempOldSolution.clone();
+                System.out.println("New best solution found!");
                 display(tempSolution);
             }
             display(tempSolution);
-            counter++;
-        }
 
+        }
         display(tempSolution);
         oldSolution = tempSolution.clone();
 
