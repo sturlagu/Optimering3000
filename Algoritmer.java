@@ -5,12 +5,12 @@ public class Algoritmer {
     public static void main(String[] args) {
 
         // Bygger et nettverk av byer
-        int size = 10; //Antall byer
-        int cost = 100; //Kostnad ? dra mellom byer (Mellom 1 og cost)
-        int[][] cities = new int[size][size]; // Tabellen for ? holde byer
+        int size = 5; //Antall byer
+        int cost = 100; //Kostnad � dra mellom byer (Mellom 1 og cost)
+        int[][] cities = new int[size][size]; // Tabellen for � holde byer
         int[][] oldSolution = new int[size][size];
         int[][] bestSolution = new int[size][size];
-        boolean[][] visited = new boolean[size][size]; // Tabellem for bes?kte byer
+        boolean[][] visited = new boolean[size][size]; // Tabellem for bes�kte byer
 
         //Trekker tilfeldig kostnad mellom byer
         for (int i = 0; i < cities.length; i++) {
@@ -29,7 +29,7 @@ public class Algoritmer {
             }
         }
 
-        // Forskjellige variabler for ? holde resultater
+        // Forskjellige variabler for � holde resultater
         int randomResultat;
         int iterativeResultat;
         int greedyResultat;
@@ -38,41 +38,40 @@ public class Algoritmer {
 
         // TESTING av forskjellige algoritmer
 
-
+        /*
         randomResultat = randomAlg(cities, visited, oldSolution, size);
         System.out.print("Random resultat: " + randomResultat + "\n");
-
         display(oldSolution);
-
 
 
         greedyOptResultat = greedyOpt(cities, visited, size, randomResultat, oldSolution, bestSolution, 1);
-        System.out.print("Greedy optimalisert p? random: " + greedyOptResultat + "\n");
-
-        display(bestSolution);
+        System.out.print("Greedy optimalisert p� random: " + greedyOptResultat + "\n");
 
         greedyRandomOptResultat = greedyRandomOpt(cities, visited, size, randomResultat, oldSolution, bestSolution, 1);
-        System.out.println("Greedy random optimalisert p? random: " + greedyRandomOptResultat);
+        System.out.println("Greedy random optimalisert p� random: " + greedyRandomOptResultat);
         System.out.println("");
-
-        display(oldSolution);
-
+        */
 
         iterativeResultat = iterativeRandomAlg(cities, visited, oldSolution, size);
-        System.out.print("Iterativ Random resultat p? iterativ random: " + iterativeResultat + "\n");
+        System.out.print("Iterativ Random resultat på iterativ random: " + iterativeResultat + "\n");
+        display(oldSolution);
+
+        /*
         greedyOptResultat = greedyOpt(cities, visited, size, iterativeResultat, oldSolution, bestSolution, 2);
         System.out.print("Greedy optimalisert: " + greedyOptResultat + "\n");
         greedyRandomOptResultat = greedyRandomOpt(cities, visited, size, iterativeResultat, oldSolution, bestSolution, 2);
-        System.out.println("Greedy random optimalisert p? iterativ random: " + greedyRandomOptResultat);
+        System.out.println("Greedy random optimalisert p� iterativ random: " + greedyRandomOptResultat);
         System.out.println("");
+           */
 
+        /*
         greedyResultat = greedyAlg(cities, visited, oldSolution ,size);
         System.out.print("Greedy resultat: " + greedyResultat + "\n");
         greedyOptResultat = greedyOpt(cities, visited, size, greedyResultat, oldSolution, bestSolution, 3);
-        System.out.print("Greedy optimalisert p? greedy: " + greedyOptResultat + "\n");
+        System.out.print("Greedy optimalisert p� greedy: " + greedyOptResultat + "\n");
         greedyRandomOptResultat = greedyRandomOpt(cities, visited, size, greedyResultat, oldSolution, bestSolution, 3);
-        System.out.println("Greedy random optimalisert p? greedy: " + greedyRandomOptResultat);
-
+        System.out.println("Greedy random optimalisert p� greedy: " + greedyRandomOptResultat);
+        */
     } // Main END
 
     // Trekker et tilfeldig tall og returnerer det (Ferdig)
@@ -82,7 +81,7 @@ public class Algoritmer {
         return randomNum;
     }
 
-    // Resetter bes?kte byer (Ferdig)
+    // Resetter bes�kte byer (Ferdig)
     public static boolean[][] resetVisited(boolean[][] visited) {
         for (int i = 0; i < visited.length; i++) {
             for (int j = 0; j < visited.length; j++) {
@@ -129,15 +128,17 @@ public class Algoritmer {
         int counter = 0;
         flushArray(oldSolution);
         while(counter != cities.length){
-            while(a == b || visited[a][b] && visited[b][a]) {
+            while(a == b || (visited[a][b] && visited[b][a]) || cities[a][b] == 0) {
                 b = randomNumber(size) - 1;
             }
             visited[a][b] = true;
             visited[b][a] = true;
             oldSolution[a][b] = cities[a][b];
+
             //System.out.print(a + "-" + b + " cost: "+ cities[a][b] + " -> \n");
             total += cities[a][b];
             counter++;
+
             a = b;
         }
         //System.out.println("total cost random algorithm: " + total + "\n");
@@ -151,17 +152,22 @@ public class Algoritmer {
         int currentRoute;
         int bestRoute = Integer.MAX_VALUE;
         int [][] tempSolution = new int[size][size];
-
-        for(int i = 0; i < iterativeAmount; i++){
-            currentRoute = randomAlg(cities, visited, oldSolution ,size);
+        int [][] tempOldSolution = oldSolution.clone();
+        int counter = 0;
+        while(counter != iterativeAmount){
+            currentRoute = randomAlg(cities, visited, tempOldSolution ,size);
             if(currentRoute < bestRoute){
                 bestRoute = currentRoute;
-                tempSolution = oldSolution;
+                tempSolution = tempOldSolution.clone();
+                display(tempSolution);
             }
-            resetVisited(visited);
+            display(tempSolution);
+            counter++;
         }
-        //System.out.println("total cost iterative random algorithm: " + bestRoute + "\n");
-        oldSolution = tempSolution;
+
+        display(tempSolution);
+        oldSolution = tempSolution.clone();
+
         return bestRoute;
     }
 
@@ -196,22 +202,17 @@ public class Algoritmer {
         return total;
     }
 
-    public static int greedyOpt(int[][] cities, boolean[][] visited, int size, int oldCost, int[][] oldSolution, int[][] bestSolution, int command){
+    public static int greedyOpt(int[][] cities, boolean[][] visited, int size, int oldCost, int[][] oldSolution, int[][] bestSolution, int c){
         int newCost = 0;
         int bestCost = oldCost;
         int a;
         int b;
-
-
         int[][] newSolution = new int[size][size];
-        bestSolution = oldSolution;
-
-
-        int tempCities[][] = cities;
+        bestSolution = oldSolution.clone();
+        int[][] tempCities;
+        tempCities = cities.clone();
         int temp[][] = new int[size][size]; // Holder verdier mens vi bytter byer;
-
-
-        int maxTries = 10; // Bestemmer hvor lenge vi skal holde p?
+        int maxTries = 10; // Bestemmer hvor lenge vi skal holde p�
 
         for(int i = 0; i < maxTries; i++){
             a = randomNumber(size) - 1; // Trekker tilfeldig by som skal
@@ -219,22 +220,22 @@ public class Algoritmer {
 
             // Bytter byer
             for(int j = 0; j < tempCities.length; j++){
-                tempCities[a][j] = temp[a][j];
+                temp[a][j] = tempCities[a][j];
                 tempCities[a][j] = tempCities[b][j];
                 tempCities[b][j] = temp[a][j];
             }
-            // Velger initiall l?sning
-            if(command == 1){
-                newCost = randomAlg(tempCities, visited, oldSolution ,size);
+            // Velger initiall l�sning
+            if(c == 1){
+                newCost = randomAlg(tempCities, visited, oldSolution, size);
                 newSolution = oldSolution.clone();
             }
-            else if(command == 2){
-                newCost = iterativeRandomAlg(tempCities, visited, oldSolution ,size);
-                newSolution = oldSolution;
+            else if(c == 2){
+                newCost = iterativeRandomAlg(tempCities, visited, oldSolution, size);
+                newSolution = oldSolution.clone();
             }
-            else if(command == 3){
-                newCost = greedyAlg(tempCities, visited, oldSolution ,size);
-                newSolution = oldSolution;
+            else if(c == 3){
+                newCost = greedyAlg(tempCities, visited, oldSolution, size);
+                newSolution = oldSolution.clone();
             }
 
             if(newCost < oldCost){
@@ -246,63 +247,68 @@ public class Algoritmer {
                 }
             }
         }
+        display(bestSolution);
         return bestCost;
     }
 
-    public static int greedyRandomOpt(int[][] cities, boolean[][] visited, int size, int oldCost, int[][] oldSolution, int[][] bestSolution, int command){
+    public static int greedyRandomOpt(int[][] cities, boolean[][] visited, int size, int oldCost, int[][] oldSolution, int[][] bestSolution, int c){
         int newCost = 0;
         int bestCost = oldCost;
-        int a = randomNumber(size) - 1; // Trekker tilfeldig by som skal
-        int b = randomNumber(size) - 1; // Byttes med en annen tilfeldig by
+        int a; // Trekker tilfeldig by som skal
+        int b; // Byttes med en annen tilfeldig by
         int[][] newSolution = new int[size][size];
-        bestSolution = oldSolution;
-        int tempCities[][] = cities;
+        bestSolution = oldSolution.clone();
+        int[][] tempCities;
+        tempCities = cities.clone();
         int temp[][] = new int[size][size]; // Holder verdier mens vi bytter byer;
-        int maxTries = 10; // Bestemmer hvor lenge vi skal holde p?
+        int maxTries = 10; // Bestemmer hvor lenge vi skal holde p�
         double rnd;
-        double probability = 0.9; // Bestemmer hvor lenge vi skal holde p?
+        double probability = 0.9; // Bestemmer hvor lenge vi skal holde p�
+
         do{
             for(int i = 0; i < maxTries; i++){
+                a = randomNumber(size) - 1; // Trekker tilfeldig by som skal
+                b = randomNumber(size) - 1; // Byttes med en annen tilfeldig by
+
                 // Bytter byer
                 for(int j = 0; j < tempCities.length; j++){
-                    tempCities[a][j] = temp[a][j];
+                    temp[a][j] = tempCities[a][j];
                     tempCities[a][j] = tempCities[b][j];
                     tempCities[b][j] = temp[a][j];
                 }
-                // Velger initiall l?sning
-                if(command == 1){
-                    newCost = randomAlg(tempCities, visited, oldSolution ,size);
-                    newSolution = oldSolution;
+                // Velger initiall l�sning
+                if(c == 1){
+                    newCost = randomAlg(tempCities, visited, oldSolution, size);
+                    newSolution = oldSolution.clone();
                 }
-                else if(command == 2){
-                    newCost = iterativeRandomAlg(tempCities, visited, oldSolution ,size);
-                    newSolution = oldSolution;
+                else if(c == 2){
+                    newCost = iterativeRandomAlg(tempCities, visited, oldSolution, size);
+                    newSolution = oldSolution.clone();
                 }
-                else if(command == 3){
-                    newCost = greedyAlg(tempCities, visited, oldSolution ,size);
-                    newSolution = oldSolution;
+                else if(c == 3){
+                    newCost = greedyAlg(tempCities, visited, oldSolution, size);
+                    newSolution = oldSolution.clone();
                 }
 
                 if(newCost < oldCost){
                     oldCost = newCost;
-                    oldSolution = newSolution;
+                    oldSolution = newSolution.clone();
                     if(newCost < bestCost){
                         bestCost = newCost;
-                        bestSolution = newSolution;
+                        bestSolution = newSolution.clone();
                     }
                 }
                 else{
                     rnd = ((random() % 100)/100);
                     if(rnd < probability){
                         oldCost = newCost;
-                        bestSolution = newSolution;
+                        bestSolution = newSolution.clone();
                     }
                 }
             }
             probability = probability * 0.9;
         }while(probability > 0.0000001);
-        flushArray(oldSolution);
-        oldSolution = bestSolution;
+        display(bestSolution);
         return bestCost;
     }
 } // Class END
