@@ -5,7 +5,7 @@ public class graphColor {
 	public static void main(String[] args) {
 		
 		int brw = 3; //black red white
-		int numNodes = 4; //number of nodes
+		int numNodes = 2; //number of nodes
 		int[] row1 = new int[numNodes]; //declares first row with number of nodes
 		int[] row2 = new int[numNodes];
 		int[] row1Child = new int[numNodes];
@@ -29,7 +29,9 @@ public class graphColor {
 		
 		onePointCrossover(row1Child, row2Child, numNodes);
 		
-		for(int i = 0; i<= 10; i++) { //performs single cross over 10 times
+		int crossoverIterations = 0;
+		
+		while(crossoverIterations<=10) { //performs single cross over 10 times
 			int fitness1 = 0;
 			int fitness2 = 0;
 			int fitness3 = 0;
@@ -41,29 +43,43 @@ public class graphColor {
 			fitness4 = checkSatisfied(row2Child);
 			
 			if(fitness1 >= fitness2 && fitness1 >= fitness3 && fitness1 >= fitness4) { //checks if fitness of row1 is greater than all
+				System.out.println("Parent 1 kept");
 				if(fitness2 >= fitness3 && fitness2 >= fitness4){
 					mutationOdds(row1, numNodes, brw); //random mutation
 					mutationOdds(row2, numNodes, brw);
+					
+					rowPrint(row1);
+					rowPrint(row2);
 					
 					onePointCrossover(row1, row2, numNodes);
 				}
 				else if(fitness3 >= fitness2 && fitness3 >= fitness4) {
 					mutationOdds(row1, numNodes, brw);
 					mutationOdds(row1Child, numNodes, brw);
+
+					rowPrint(row1);
+					rowPrint(row1Child);					
 					
 					onePointCrossover(row1, row1Child, numNodes);
 				}
 				else if(fitness4 >= fitness2 && fitness4 >= fitness3) {
 					mutationOdds(row1, numNodes, brw);
 					mutationOdds(row2Child, numNodes, brw);
+
+					rowPrint(row1);
+					rowPrint(row2Child);					
 					
 					onePointCrossover(row1, row2Child, numNodes);
 				}
 			}
 			else if(fitness2 >= fitness1 && fitness2 >= fitness3 && fitness2 >= fitness4) { //checks if fitness of row2 is greater than all
+				System.out.println("Parent 2 kept");
 				if(fitness1 >= fitness3 && fitness1 >= fitness4){
 					mutationOdds(row2, numNodes, brw);
 					mutationOdds(row1, numNodes, brw);
+
+					rowPrint(row2);
+					rowPrint(row1);					
 					
 					onePointCrossover(row2, row1, numNodes);
 				}
@@ -71,19 +87,29 @@ public class graphColor {
 					mutationOdds(row2, numNodes, brw);
 					mutationOdds(row1Child, numNodes, brw);
 					
+					rowPrint(row2);
+					rowPrint(row1Child);					
+					
 					onePointCrossover(row2, row1Child, numNodes);
 				}
 				else if(fitness4 >= fitness1 && fitness4 >= fitness3) {
 					mutationOdds(row2, numNodes, brw);
 					mutationOdds(row2Child, numNodes, brw);
 					
+					rowPrint(row2);
+					rowPrint(row2Child);					
+					
 					onePointCrossover(row2, row2Child, numNodes);
 				}				
 			}
 			else if(fitness3 >= fitness1 && fitness3 >= fitness2 && fitness3 >= fitness4) { //checks if fitness of row1Child is greater than all
+				System.out.println("Child 1 kept");
 				if(fitness1 >= fitness2 && fitness1 >= fitness4){
 					mutationOdds(row1Child, numNodes, brw);
 					mutationOdds(row1, numNodes, brw);
+					
+					rowPrint(row1Child);
+					rowPrint(row1);					
 					
 					onePointCrossover(row1Child, row1, numNodes);
 				}
@@ -91,19 +117,29 @@ public class graphColor {
 					mutationOdds(row1Child, numNodes, brw);
 					mutationOdds(row2, numNodes, brw);
 					
+					rowPrint(row1Child);
+					rowPrint(row2);						
+					
 					onePointCrossover(row1Child, row2, numNodes);
 				}
 				else if(fitness4 >= fitness1 && fitness4 >= fitness2) {
 					mutationOdds(row1Child, numNodes, brw);
 					mutationOdds(row2Child, numNodes, brw);
 					
+					rowPrint(row1Child);
+					rowPrint(row2Child);						
+					
 					onePointCrossover(row1Child, row2Child, numNodes);
 				}
 			}
-			else if(fitness4 >= fitness1 && fitness4 >= fitness2 && fitness4 >= fitness3) { //checks if fitness of row1Child is greater than all
+			else if(fitness4 >= fitness1 && fitness4 >= fitness2 && fitness4 >= fitness3) {//checks if fitness of row1Child is greater than all
+				System.out.println("Child 2 kept");
 				if(fitness1 >= fitness2 && fitness1 >= fitness3){
 					mutationOdds(row2Child, numNodes, brw);
 					mutationOdds(row1, numNodes, brw);
+					
+					rowPrint(row2Child);
+					rowPrint(row1);						
 					
 					onePointCrossover(row2Child, row1, numNodes);
 				}
@@ -111,38 +147,37 @@ public class graphColor {
 					mutationOdds(row2Child, numNodes, brw);
 					mutationOdds(row2, numNodes, brw);
 					
+					rowPrint(row2Child);
+					rowPrint(row2);						
+					
 					onePointCrossover(row2Child, row2, numNodes);
 				}
 				else if(fitness3 >= fitness1 && fitness3 >= fitness2) {
 					mutationOdds(row2Child, numNodes, brw);
 					mutationOdds(row1Child, numNodes, brw);
 					
+					rowPrint(row2Child);
+					rowPrint(row1Child);	
+					
 					onePointCrossover(row2Child, row1Child, numNodes);
 				}
 			}
 			
+			crossoverIterations++;
+			
 			System.out.println("");				
-			System.out.println("One point crossover finished!");
+			System.out.println("NEW ITERATION");
+			System.out.println("");	
+			System.out.println("");	
+			System.out.println("");	
+			System.out.println("");	
 			System.out.println("");	
 			
 		}
-
-				
-		
-		/*
-		for(int i = 0; i<=10; i++){
-			if(checkSatisfied(row1Child) > checkSatisfied(row1) && checkSatisfied(row1Child) > checkSatisfied(row2)) {
-				if(checkSatisfied(row2Child) > checkSatisfied(row1) && checkSatisfied(row2Child) > checkSatisfied(row2)) {
-					onePointCrossover(row1Child, row2Child, numNodes);
-				}
-				else if (checkSatisfied(row2Child) > checkSatisfied(row1) && checkSatisfied(row2Child) > checkSatisfied(row2))
-			}
-		}
-		*/
 		
 		
-		
-		}
+			
+	}
 		
 	
 	public static void rowPrint(int []a){
